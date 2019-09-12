@@ -39,7 +39,7 @@ def main():
         try:
             A = [int(x) for x in l.split()]
         except ValueError:
-            print('Is your column number an integer?')
+            print('Are the values in the files numbers?')
             sys.exit(1)
 
         # handle exceptions that could be caused by using the provided
