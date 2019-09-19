@@ -4,6 +4,26 @@ import argparse
 import sys
 
 
+# define function to take mean of a column
+def mean_col(V):
+    try:
+        mean = sum(V)/len(V)
+    except TypeError:
+        return None
+        sys.exit(1)
+    return(mean)
+
+
+# define function to take standard deviation of a column
+def stdev_col(V):
+    try:
+        stdev = math.sqrt(sum([(mean_col(V)-x)**2 for x in V]) / len(V))
+    except TypeError:
+        return None
+        sys.exit(1)
+    return(stdev)
+
+
 def main():
     # Use argparse to provide user-inputted text file and column number
     parser = argparse.ArgumentParser(
@@ -18,6 +38,10 @@ def main():
                         type=int,
                         help="The column number",
                         required=True)
+
+    parser.add_argument('--operation',
+                        type=str,
+                        help='mean or stdev')
 
     args = parser.parse_args()
 
@@ -35,7 +59,7 @@ def main():
 
     # fills V, an empty array with values from selected column
     for l in f:
-        
+
         try:
             A = [int(x) for x in l.split()]
         except ValueError:
@@ -50,15 +74,17 @@ def main():
             print('The column number should be an integer')
             sys.exit(1)
         except IndexError:
-            print('The column number should be an existing column in the file')
+            print('The column number should be an existing column')
             sys.exit(1)
 
     # calculate mean and standard deviation
-    mean = sum(V)/len(V)
-    stdev = math.sqrt(sum([(mean-x)**2 for x in V]) / len(V))
+    mean = mean_col(V)
+    stdev = stdev_col(V)
 
-    print('mean:', mean)
-    print('stdev:', stdev)
+    if args.operation == 'mean':
+        print("mean:", mean)
+    elif args.operation == 'stdev':
+        print("stdev:", stdev)
 
 
 if __name__ == '__main__':
